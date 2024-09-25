@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        canvas {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .prediction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .prediction-table th, .prediction-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .prediction-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prediction Results</h1>
+    <h2>Predicted Labels</h2>
+
+    <table class="prediction-table">
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Predicted Label</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for index, label in predictions %}
+            <tr>
+                <td>{{ index }}</td>
+                <td>{{ label }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Predicted Labels Distribution</h2>
+    <canvas id="predictionsChart"></canvas>
+
+    <script>
+        const predictions = {{ predictions|tojson }};
+        const labels = {};
+
+        // Count occurrences of each predicted label
+        predictions.forEach(prediction => {
+            const label = prediction[1]; // Extract the predicted label
+            labels[label] = (labels[label] || 0) + 1; // Increment count
+        });
+
+        const data = {
+            labels: Object.keys(labels),
+            datasets: [{
+                label: 'Predicted Labels',
+                data: Object.values(labels),
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                ],
+            }]
+        };
+
+        const config = {
+            type: 'pie',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Distribution of Predicted Labels'
+                    }
+                }
+            },
+        };
+
+        const predictionsChart = new Chart(
+            document.getElementById('predictionsChart'),
+            config
+        );
+    </script>
+</body>
+</html>

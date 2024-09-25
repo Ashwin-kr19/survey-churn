@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Predict with Trained Model</h2>
+<form action="/predict" enctype="multipart/form-data" method="post">
+    <div class="mb-3">
+        <label for="test_file" class="form-label">Upload Test CSV File</label>
+        <input class="form-control" type="file" id="test_file" name="test_file" accept=".csv" required>
+    </div>
+    <button type="submit" class="btn btn-success">Predict</button>
+</form>
+{% endblock %}

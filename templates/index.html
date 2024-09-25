@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Train Machine Learning Model</h2>
+<form action="/train" enctype="multipart/form-data" method="post">
+    <div class="mb-3">
+        <label for="train_file" class="form-label">Upload Training CSV File</label>
+        <input class="form-control" type="file" id="train_file" name="train_file" accept=".csv" required>
+    </div>
+    <div class="mb-3">
+        <label for="target_column" class="form-label">Target Column Name</label>
+        <input type="text" class="form-control" id="target_column" name="target_column" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Train Model</button>
+</form>
+{% endblock %}
